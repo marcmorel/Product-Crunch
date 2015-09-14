@@ -3,7 +3,7 @@
 
 /**
 * @author Marc Morel
-* @copyright Procheo, 2013
+* @copyright Marc Morel, 2015
 */
 
 #include "reader.hpp"

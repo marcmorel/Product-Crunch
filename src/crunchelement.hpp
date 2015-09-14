@@ -25,7 +25,7 @@
 
 /**
 * @author Marc Morel
-* @copyright Procheo, 2014
+* @copyright Marc Morel, 2015
 *
 * CrunchElement is the parent class of Model, Product, Reference.
 * It is the main class used to store structured product information 

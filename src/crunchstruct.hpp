@@ -10,7 +10,7 @@
 
 /**
 * @author Marc Morel
-* @copyright Procheo, 2014
+* @copyright Marc Morel, 2015
 *
 * this files contains different structs used in the crunch app.
 */

@@ -4,36 +4,48 @@ Product Crunch
  ** Product Crunch ** permet de transformer un flux XML ou CSV de produits en un catalogue exploitable en HTML5.
 
  Ce catalogue comprend les fonctionnalités suivantes :
+ 
  * navigation par catégories, sous-catégories, etc ...
  * recherche par texte libre
  * recherche prédictive (résultats au fur et à mesure de la saisie)
  * gestion de champs propriétaires dans les fiches produits
  * gestion des déclinaisons (taille, couleurs ...) sur 2 niveaux
+ * habillage différent en fonction de la catégorie affichée
 
 
+Product Crunch se compose de deux modules, écrits en C++ et en Javascript. 
 
-Product Crunch est écrit en C++ et en Javascript. 
+Le **module en C++** génère une arborescence de fichiers JSON à partir du fichier source et d'un fichier de paramétrage.
 
-Le module en C++ génère une arborescence de fichiers JSON. Le module en javascript est l'application HTML5 de présentation du catalogue. Il se base sur les fichiers JSON et ne requiert pas de base de données.
+Le **module en javascript** est l'application HTML5 de présentation du catalogue. Il se base sur les fichiers JSON et ne requiert pas de base de données.
 
-Dépendances C++
----------------
+Les deux modules peuvent fonctionner indépendamment, le seul lien entre les deux étant le système de fichier JSON.
+
+## Le module C++
+
+### Dépendances C++
+
 
 Les dépendances de Product Crunch sont :
 
-### BOOST
+#### BOOST
 
 La librairie **BOOST** (package `libboost-dev` sur Debian). La version utilisée dans cette repository est  1.49 (package spécifique `libboost1.49-dev`). Cette librairie est utilisée pour les expressions régulières, la gestion des options de ligne de commande, les tables de hashage (unordered_map), la gestion du multithread. Cette librairie est linkée, elle n'est pas incluse dans les sources.
 
-La commande pour installer la dernière version est : `apt-get install libboost-all-dev`
 
-### PUGIXML
+La commande suivante permet d'installer la version sur la machine cible :
+
+```
+apt-get install -y libboost-all-dev
+```
+
+#### PUGIXML
 
 La librairie **pugixml-1.2**. Celle librairie est utilisée pour le parsing XML des fichiers Google Merchant. Pas d'installation à prévoir : les sources sont dans la repository.
 
 Licence MIT : http://pugixml.org/docs/quickstart.html#license
 
-### JSON SPIRIT
+#### JSON SPIRIT
 
 La librairie **json-spirit** en version 4.06. Cette librairie est utilisée pour parser le fichier de paramétrage du crunch (rédigé en JSON) ainsi que pour créer les fichiers JSON constituant l'output du crunch. Pas d'installation à prévoir : les sources sont dans la repository.
 
@@ -42,31 +54,50 @@ http://www.codeproject.com/Articles/20027/JSON-Spirit-A-C-JSON-Parser-Generator-
 
 Licence MIT : http://www.codeproject.com/Articles/20027/JSON-Spirit-A-C-JSON-Parser-Generator-Implemented
 
-### LIBCURL
+#### LIBCURL
 
 La librairie **libcurl** est utilisée pour télécharger les images citées dans le flux google merchant.
 Elle est linkée dans l'application.
 
+La commande suivante permet d'installer la version sur la machine cible :
+
+```
+apt-get install -y libcurl4-openssl-dev
+```
+
+
 Licence dérivée de MIT/X : http://curl.haxx.se/docs/copyright.html
 
-### OPENSSL
+#### OPENSSL
 
 La librairie **openSSL** est utilisée pour calculer les MD5.
 Elle est linkée dans l'application.
 
+La commande suivante permet d'installer la version sur la machine cible :
+
+```
+apt-get install -y openssl
+```
+
+
 Licence Apache : https://www.openssl.org/about/
 
-###ImageMagick
+#### ImageMagick
 
 La librairie **imagemagick** est utilisée pour calculer des vignettes d'images. Elle s'installe avec le package **libmagick++-dev**.
 
-Licence apahce 2.0 : http://www.imagemagick.org/script/index.php
+La commande suivante permet d'installer la version sur la machine cible :
 
-Compilation
------------
+```
+apt-get install -y libmagick++-dev
+```
+
+Licence Apache 2.0 : http://www.imagemagick.org/script/index.php
+
+### Compilation
 
 
-####Options de compilation :
+#### Options de compilation :
 
 |option|description|
 |---|---|
@@ -86,9 +117,9 @@ Nous avons le binaire release dans bin/release/ et ces fichiers o dans build/rel
 
 Nous avons le binaire debug dans bin/debug/ et ces fichiers o dans build/debug/.
 
-Utilisation
------------
-Le crunch prend 3 paramètres :
+### Utilisation
+
+Le crunch prend 1 paramètre :
 
 * `config-file` : indique le fichier de paramétrage à utiliser. La syntaxe est décrite ci-après.
 
@@ -110,7 +141,7 @@ Les clés de paramétrage sont les suivantes :
 | `diff-directory` | string / optionnel| Si on souhaite que le crunch calcule la différence (DIFF) par rapport au précédent crunch, on indique ici le path du crunch précédent | /content/orchestra/previous-crunch/ |
 | `status-json-file` | string / optionnel | Si on calcule un DIFF, le résultat du DIFF sera écrit sous forme JSON dans le fichier `status-json-file` | /content/orchestra/crunchstatus.json |
 | `server-directory` | string / optionnel | Si on souhaite garder une version serveur du crunch en plus de la version synchronisé sur tablettes, on indique le path de destination | /content/orchestra/server-crunch/ |
-| `server-url` | string / optionnel | Dans le cas où on garde une version serveur, `server-url` sera l'URL d'accès à ce serveur | http://catalog.kiwapp.com/catalog/orcchestra/ |
+| `server-url` | string / optionnel | Dans le cas où on garde une version serveur, `server-url` sera l'URL d'accès à ce serveur | http://catalog.server.com/catalog/orcchestra/ |
 | `source-password` | string / optionnel | Mot de passe pour un download protégé par HTACCESS | strongpassword1234 |
 | `source-login` | string / optionnel | Login pour un download protégé par HTACCESS | user |
 | `photo-hashkey` | integer / optionnel | Taille de la hashkey pour regrouper les ressources de photos. Si `-1` (valeur par défaut), cette valeur sera calculée automatiquement par le crunch | 2 |
@@ -153,11 +184,11 @@ Si `server_directory` est défini, un crunch "version serveur" est généré :
 |-----------|-------------|---------------|-----------|------|-----------|---|
 | `false`   | N/A | N/A | N/A | N/A | Non téléchargées. Les URLs des images sont absolues et restent sur le serveur client. Pas d'image sur les devices | Aucun calcul de vignette possible |
 | `true`    | `undefined`| `false` | `false`| `false`| **Cas impossible** : les photos doivent être téléchargées mais non transmises sur les devices. Donc `server_ directory` devrait être défini.| Pas de génération de vignette |
-| `true`    | `path défini`| `false` | `false`| `false`| Téléchargées. URL des images absolues, vers serveur kiwapp. Pas d'image sur les devices| Pas de génération de vignette |
+| `true`    | `path défini`| `false` | `false`| `false`| Téléchargées. URL des images absolues, vers serveur server. Pas d'image sur les devices| Pas de génération de vignette |
 | `true`    | `undefined`| `true` | `false`| `false`| Téléchargées et transmises sur les devices. Pas de stockage serveur| Pas de génération de vignette |
 | `true`    | `undefined`| `true` | `true`| `false`| Téléchargées et transmises sur les devices. Pas de stockage serveur| **Cas impossible** Les vignettes sont générées, non transmises et pas stockables :  `server_ directory` devrait être défini. |
 | `true`    | `defined`| `true` | `true`| `false`| Téléchargées et transmises sur les devices. Pas de stockage serveur|  Les vignettes sont générées, non transmises et stockées sur le serveur. Les vignettes étant de taille très inférieure aux images, cette confugration n'a que peu d'intéret. |
-| `true`    | `defined`| `false` | `true`| `true`| Téléchargées. URL des images absolues, vers serveur kiwapp. Pas d'image sur les devices |  Les vignettes sont générées, stockées & transmises.Cela permet d'avoir des visuels disponibles en offline avec un volume faible. |
+| `true`    | `defined`| `false` | `true`| `true`| Téléchargées. URL des images absolues, vers serveur server. Pas d'image sur les devices |  Les vignettes sont générées, stockées & transmises.Cela permet d'avoir des visuels disponibles en offline avec un volume faible. |
 | `true`    | `defined`| `true` | `true`| `true`| Téléchargées et transmises.  |  Les vignettes sont générées, stockées & transmises. La génération des vignettes ne présente pas beaucoup pas d'intérêt car les images pleine taille sont transmises aussi. Utile lorsque l'application est lente et que le transfert de données ne pose pas de problème|
 
 

@@ -6,7 +6,7 @@
 
 /**
 * @author Marc Morel
-* @copyright Procheo, 2014
+* @copyright Marc Morel, 2015
 */
 
 #define PROGRESSIVE_MAX_DEPTH 15
