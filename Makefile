@@ -6,6 +6,7 @@ LDFLAGS= -Wl,-L/usr/lib64  -lboost_regex -lboost_program_options  -lboost_date_t
 EXEC=crunch
 EXEC_DEBUG = crunchd
 #list of source files
+
 OBJDIR=build/release
 OBJDIR_DEBUG=build/debug
 SRC= $(wildcard src/*.cpp) $(wildcard src/json_spirit/*.cpp) $(wildcard  src/pugixml-1.2/*.cpp)
